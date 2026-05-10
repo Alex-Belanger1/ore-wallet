@@ -1,3 +1,5 @@
+# Live site: https://alex-belanger1.github.io/ore-wallet/
+
 # SOV / ORE Expo Router app
 
 A mobile-first Expo + React Native + TypeScript app with Expo Router and a premium ORE-inspired dark theme. The current build uses dummy product data only and is safe to extend without live APIs.
