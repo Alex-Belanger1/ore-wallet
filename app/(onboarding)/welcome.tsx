@@ -1,7 +1,6 @@
 import { router } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
-import { OnboardingIllustration } from '../../components/onboarding-illustration';
 import { OnboardingShell } from '../../components/onboarding-shell';
 import { PrimaryButton } from '../../components/primary-button';
 import { SecondaryButton } from '../../components/secondary-button';
@@ -18,9 +17,7 @@ export default function WelcomeScreen() {
       step={1}
       totalSteps={6}
       eyebrow="ORE store of value"
-      title="Build a calm ORE-native vault for saving, privacy, and yield."
-      description="The onboarding flow is dummy only, but the copy, pacing, and controls are designed to feel like a premium fintech app."
-      illustration={<OnboardingIllustration variant="welcome" />}>
+      title="Create an ORE Native wallet for privacy, yield, & DeFi">
       <StatCard variant="subtle">
         <TokenRow
           label="Store value in ORE"
@@ -34,7 +31,7 @@ export default function WelcomeScreen() {
         />
         <TokenRow
           label="Grow into yield later"
-          detail="Mining, staking, and lending remain available after setup."
+          detail="Mining, Staking, Lending, and Looping available after setup"
           value="Ready"
           isLast
         />

@@ -1,27 +1,32 @@
+import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import { StyleSheet, View } from 'react-native';
+import { useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { FormField } from '../../components/form-field';
-import { OnboardingIllustration } from '../../components/onboarding-illustration';
+import { GlassSurface } from '../../components/glass-surface';
 import { OnboardingShell } from '../../components/onboarding-shell';
 import { PrimaryButton } from '../../components/primary-button';
 import { SecondaryButton } from '../../components/secondary-button';
 import { StatCard } from '../../components/stat-card';
 import { TokenRow } from '../../components/token-row';
-import { oreSpacing } from '../../constants/theme';
+import { oreColors, oreRadii, oreSpacing, oreTypography } from '../../constants/theme';
 import { useOnboarding } from '../../lib/onboarding-store';
+
+const feeAssets = ['ORE', 'SOL', 'USDC'] as const;
+type FeeAsset = (typeof feeAssets)[number];
 
 export default function CreateAccountScreen() {
   const onboarding = useOnboarding();
+  const [feeAsset, setFeeAsset] = useState<FeeAsset>('ORE');
+  const [isFeeAssetOpen, setIsFeeAssetOpen] = useState(false);
 
   return (
     <OnboardingShell
       step={2}
       totalSteps={6}
       eyebrow="Create account"
-      title="Set up a clean ORE wallet profile with a modern recovery path."
-      description="This is a dummy sign-up form. Nothing here creates a real account or touches a live API."
-      illustration={<OnboardingIllustration variant="create" />}>
+      title="Set up a clean ORE wallet profile with a modern recovery path.">
       <StatCard>
         <FormField
           label="Full name"
@@ -53,17 +58,54 @@ export default function CreateAccountScreen() {
           detail="Passkey-forward UX with a cleaner path than raw seed phrase setup."
           value="Modern"
         />
-        <TokenRow
-          label="Fee posture"
-          detail="ORE-settled product interactions are framed inside the wallet."
-          value="ORE"
-        />
-        <TokenRow
-          label="Network status"
-          detail="No chain calls, no real onboarding, no external verification."
-          value="Dummy"
-          isLast
-        />
+        <View style={styles.preferenceRow}>
+          <View style={styles.preferenceCopy}>
+            <Text style={styles.preferenceLabel}>Fee posture</Text>
+            <Text style={styles.preferenceDetail}>
+              Choose the default asset used to frame wallet fees.
+            </Text>
+          </View>
+          <View style={styles.dropdownWrap}>
+            <Pressable
+              accessibilityLabel="Select fee asset"
+              accessibilityRole="button"
+              onPress={() => setIsFeeAssetOpen((current) => !current)}
+              style={({ pressed }) => [styles.dropdownButton, pressed && styles.pressed]}>
+              <GlassSurface style={styles.dropdownGlass} variant="subtle" showSheen={false} />
+              <Text style={styles.dropdownValue}>{feeAsset}</Text>
+              <Ionicons
+                color={oreColors.text}
+                name={isFeeAssetOpen ? 'chevron-up' : 'chevron-down'}
+                size={16}
+              />
+            </Pressable>
+            {isFeeAssetOpen ? (
+              <GlassSurface style={styles.dropdownMenu} variant="subtle" showSheen={false}>
+                {feeAssets.map((asset) => (
+                  <Pressable
+                    accessibilityRole="button"
+                    key={asset}
+                    onPress={() => {
+                      setFeeAsset(asset);
+                      setIsFeeAssetOpen(false);
+                    }}
+                    style={({ pressed }) => [styles.dropdownOption, pressed && styles.optionPressed]}>
+                    <Text
+                      style={[
+                        styles.dropdownOptionText,
+                        feeAsset === asset && styles.dropdownOptionTextActive,
+                      ]}>
+                      {asset}
+                    </Text>
+                    {feeAsset === asset ? (
+                      <Ionicons color={oreColors.accent} name="checkmark" size={15} />
+                    ) : null}
+                  </Pressable>
+                ))}
+              </GlassSurface>
+            ) : null}
+          </View>
+        </View>
       </StatCard>
 
       <View style={styles.actions}>
@@ -84,6 +126,78 @@ export default function CreateAccountScreen() {
 }
 
 const styles = StyleSheet.create({
+  preferenceRow: {
+    alignItems: 'flex-start',
+    flexDirection: 'row',
+    gap: oreSpacing.md,
+    justifyContent: 'space-between',
+    paddingTop: oreSpacing.md,
+    zIndex: 2,
+  },
+  preferenceCopy: {
+    flex: 1,
+    gap: 6,
+    paddingRight: oreSpacing.sm,
+  },
+  preferenceLabel: {
+    ...oreTypography.caption,
+    color: oreColors.text,
+  },
+  preferenceDetail: {
+    ...oreTypography.body,
+    color: oreColors.textMuted,
+  },
+  dropdownWrap: {
+    minWidth: 112,
+    zIndex: 3,
+  },
+  dropdownButton: {
+    alignItems: 'center',
+    borderColor: oreColors.stroke,
+    borderRadius: oreRadii.lg,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: 8,
+    justifyContent: 'space-between',
+    minHeight: 42,
+    overflow: 'hidden',
+    paddingHorizontal: 14,
+  },
+  dropdownGlass: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  dropdownValue: {
+    ...oreTypography.caption,
+    color: oreColors.text,
+  },
+  dropdownMenu: {
+    borderRadius: oreRadii.lg,
+    gap: 2,
+    marginTop: 8,
+    overflow: 'hidden',
+    padding: 6,
+  },
+  dropdownOption: {
+    alignItems: 'center',
+    borderRadius: oreRadii.md,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    minHeight: 34,
+    paddingHorizontal: 10,
+  },
+  dropdownOptionText: {
+    ...oreTypography.caption,
+    color: oreColors.textMuted,
+  },
+  dropdownOptionTextActive: {
+    color: oreColors.accent,
+  },
+  optionPressed: {
+    backgroundColor: oreColors.surfacePressed,
+  },
+  pressed: {
+    opacity: 0.82,
+  },
   actions: {
     gap: oreSpacing.sm,
   },

@@ -2,7 +2,6 @@ import type { PropsWithChildren } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { oreSpacing } from '../constants/theme';
-import { Pill } from './pill';
 import { ProgressDots } from './progress-dots';
 import { Screen } from './screen';
 import { SectionHeader } from './section-header';
@@ -12,8 +11,8 @@ type OnboardingShellProps = PropsWithChildren<{
   totalSteps: number;
   eyebrow: string;
   title: string;
-  description: string;
-  illustration: React.ReactNode;
+  description?: string;
+  illustration?: React.ReactNode;
 }>;
 
 export function OnboardingShell({
@@ -29,9 +28,8 @@ export function OnboardingShell({
     <Screen footerInset={148}>
       <View style={styles.topBar}>
         <ProgressDots current={step} total={totalSteps} />
-        <Pill label="Dummy flow" tone="accent" />
       </View>
-      {illustration}
+      {illustration ? illustration : null}
       <SectionHeader
         eyebrow={eyebrow}
         title={title}
