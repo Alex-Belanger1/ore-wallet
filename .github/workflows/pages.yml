@@ -40,7 +40,9 @@ jobs:
         run: npx expo export --platform web --clear
 
       - name: Keep GitHub Pages from processing assets
-        run: touch dist/.nojekyll
+        run: |
+          touch dist/.nojekyll
+          cp dist/index.html dist/404.html
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
