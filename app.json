@@ -1,0 +1,24 @@
+{
+  "expo": {
+    "name": "SOV / ORE Concept",
+    "slug": "sov-ore-mobile-concept",
+    "version": "1.0.0",
+    "scheme": "sovore",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.concept.sovore"
+    },
+    "android": {
+      "package": "com.concept.sovore"
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-asset"
+    ]
+  }
+}
